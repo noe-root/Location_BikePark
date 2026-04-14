@@ -106,6 +106,38 @@
             die($message);
         } 
     }
+    function selectReservationsByClient($pdo, $clientId) {
+        try {
+            $stmt = $pdo->prepare(
+                "SELECT r.*, m.materiel_nom, m.materiel_type
+                 FROM sys.reserve r
+                 LEFT JOIN sys.materiel m ON r.materiel_ID = m.materiel_ID
+                 WHERE r.client_ID = :client_ID
+                 ORDER BY r.reserve_dateCreation DESC"
+            );
+            $stmt->execute(["client_ID" => (int)$clientId]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    function selectPaiementsByClient($pdo, $clientId) {
+        try {
+            $stmt = $pdo->prepare(
+                "SELECT p.*, b.park_dateEntre, b.park_typeBillet, b.park_nombrePistes, b.park_statutPaiement
+                 FROM sys.payer p
+                 LEFT JOIN sys.bikepark b ON p.bikepark_ID = b.bikepark_ID
+                 WHERE p.client_ID = :client_ID
+                 ORDER BY p.payer_datePaiement DESC"
+            );
+            $stmt->execute(["client_ID" => (int)$clientId]);
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     function verifEmptyData(){
         foreach($_POST as $key => $value)
         {

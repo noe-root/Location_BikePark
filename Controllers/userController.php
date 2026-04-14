@@ -59,4 +59,12 @@
         deleteUser($pdo);
         session_destroy();
         header("location:/home");
+    }elseif ($uri == "/mes-commandes") {
+        if (!isset($_SESSION["user"])) {
+            header("location:/connection");
+            exit;
+        }
+        $reservations = selectReservationsByClient($pdo, (int)$_SESSION["user"]->client_ID);
+        $paiements = selectPaiementsByClient($pdo, (int)$_SESSION["user"]->client_ID);
+        $template = "User/userCommandes.php";
     }

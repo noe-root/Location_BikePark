@@ -11,6 +11,7 @@
                 <li><a href="/admin" style="color:var(--green);font-weight:700;">⚙️ Admin</a></li>
             <?php endif ?>
             <li><a href="/profil">Mon profil</a></li>
+            <li><a href="/mes-commandes">Mes commandes</a></li>
             <li><a href="/deconnection">Déconnexion</a></li>
             <li><a href="/deleteProfil">Supprimer compte</a></li>
         <?php else : ?>
