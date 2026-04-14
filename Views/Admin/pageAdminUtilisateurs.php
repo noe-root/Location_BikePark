@@ -25,51 +25,82 @@
         </div>
 
         <div class="admin-section">
-            <div class="admin-table-wrapper">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th><th>Nom</th><th>Email</th><th>Login</th>
-                            <th>Ville</th><th>Abonnement</th><th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach($clients as $client) : ?>
-                        <tr>
-                            <td><span class="admin-id">#<?= $client->client_ID ?></span></td>
-                            <td><strong><?= htmlspecialchars($client->client_prenom . " " . $client->client_nom) ?></strong></td>
-                            <td><?= htmlspecialchars($client->client_email) ?></td>
-                            <td>
-                                <?php if($client->client_login === "admin") : ?>
-                                    <span class="admin-badge badge-admin">👑 admin</span>
-                                <?php else : ?>
-                                    <?= htmlspecialchars($client->client_login) ?>
-                                <?php endif ?>
-                            </td>
-                            <td><?= htmlspecialchars($client->client_ville) ?></td>
-                            <td>
-                                <?php if($client->client_abonnementActif == 1) : ?>
-                                    <span class="admin-badge badge-success">✓ Actif</span>
-                                <?php else : ?>
-                                    <span class="admin-badge badge-neutral">Inactif</span>
-                                <?php endif ?>
-                            </td>
-                            <td>
-                                <?php if($client->client_login !== "admin") : ?>
-                                <form method="POST" action="/admin/utilisateurs"
-                                      onsubmit="return confirm('Supprimer cet utilisateur ?')">
-                                    <input type="hidden" name="client_id" value="<?= $client->client_ID ?>">
-                                    <button type="submit" name="deleteClient" class="admin-btn-delete">🗑️ Supprimer</button>
-                                </form>
-                                <?php else : ?>
-                                    <span style="color:var(--text-muted);font-size:0.78rem;">🔒 Protégé</span>
-                                <?php endif ?>
-                            </td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            </div>
+            <form method="POST" action="/admin/utilisateurs" onsubmit="return confirmBatchDelete('clients[]', 'Supprimer les utilisateurs sélectionnés ?')">
+                <div style="margin-bottom:10px;">
+                    <button type="submit" name="deleteClientsBatch" class="admin-btn-delete">
+                        🗑️ Supprimer sélection
+                    </button>
+                </div>
+                <div class="admin-table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllClients" onclick="toggleAll(this, 'clients[]')" aria-label="Sélectionner tous les utilisateurs"></th>
+                                <th>ID</th><th>Nom</th><th>Email</th><th>Login</th>
+                                <th>Ville</th><th>Abonnement</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($clients as $client) : ?>
+                            <tr>
+                                <td>
+                                    <?php if($client->client_login !== "admin") : ?>
+                                        <input type="checkbox" name="clients[]" value="<?= $client->client_ID ?>" aria-label="Sélectionner <?= htmlspecialchars($client->client_prenom . ' ' . $client->client_nom) ?>">
+                                    <?php else : ?>
+                                        <span></span>
+                                    <?php endif ?>
+                                </td>
+                                <td><span class="admin-id">#<?= $client->client_ID ?></span></td>
+                                <td><strong><?= htmlspecialchars($client->client_prenom . " " . $client->client_nom) ?></strong></td>
+                                <td><?= htmlspecialchars($client->client_email) ?></td>
+                                <td>
+                                    <?php if($client->client_login === "admin") : ?>
+                                        <span class="admin-badge badge-admin">👑 admin</span>
+                                    <?php else : ?>
+                                        <?= htmlspecialchars($client->client_login) ?>
+                                    <?php endif ?>
+                                </td>
+                                <td><?= htmlspecialchars($client->client_ville) ?></td>
+                                <td>
+                                    <?php if($client->client_abonnementActif == 1) : ?>
+                                        <span class="admin-badge badge-success">✓ Actif</span>
+                                    <?php else : ?>
+                                        <span class="admin-badge badge-neutral">Inactif</span>
+                                    <?php endif ?>
+                                </td>
+                                <td>
+                                    <?php if($client->client_login !== "admin") : ?>
+                                    <form method="POST" action="/admin/utilisateurs"
+                                          onsubmit="return confirm('Supprimer cet utilisateur ?')">
+                                        <input type="hidden" name="client_id" value="<?= $client->client_ID ?>">
+                                        <button type="submit" name="deleteClient" class="admin-btn-delete">🗑️ Supprimer</button>
+                                    </form>
+                                    <?php else : ?>
+                                        <span style="color:var(--text-muted);font-size:0.78rem;">🔒 Protégé</span>
+                                    <?php endif ?>
+                                </td>
+                            </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </div>
     </main>
 </div>
+
+<script>
+function toggleAll(source, name) {
+    document.querySelectorAll('input[name="' + name + '"]').forEach(function(cb) {
+        cb.checked = source.checked;
+    });
+}
+function confirmBatchDelete(name, message) {
+    var checked = document.querySelectorAll('input[name="' + name + '"]:checked');
+    if (checked.length === 0) {
+        alert('Veuillez sélectionner au moins un élément.');
+        return false;
+    }
+    return confirm(message);
+}
+</script>

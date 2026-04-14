@@ -11,6 +11,11 @@
     elseif ($uri === "/admin/utilisateurs") 
     {
         requireAdmin();
+        if (isset($_POST["deleteClientsBatch"]) && !empty($_POST["clients"])) {
+            deleteClientsBatch($pdo, $_POST["clients"]);
+            header("location:/admin/utilisateurs");
+            exit;
+        }
         if (isset($_POST["deleteClient"])) {
             deleteClient($pdo, $_POST["client_id"]);
             header("location:/admin/utilisateurs");
@@ -22,6 +27,11 @@
     elseif ($uri === "/admin/reservations") 
     {
         requireAdmin();
+        if (isset($_POST["deleteReservationsBatch"]) && !empty($_POST["reservations"])) {
+            deleteReservationsBatch($pdo, $_POST["reservations"]);
+            header("location:/admin/reservations");
+            exit;
+        }
         if (isset($_POST["updateStatut"])) {
             updateReservationStatut($pdo, $_POST["reserve_ID"], $_POST["reserve_statut"]);
             header("location:/admin/reservations");
