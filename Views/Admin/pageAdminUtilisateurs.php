@@ -37,7 +37,7 @@
                             <tr>
                                 <th><input type="checkbox" id="selectAllClients" onclick="toggleAll(this, 'clients[]')" aria-label="Sélectionner tous les utilisateurs"></th>
                                 <th>ID</th><th>Nom</th><th>Email</th><th>Login</th>
-                                <th>Ville</th><th>Abonnement</th><th>Action</th>
+                                <th>Ville</th><th>Abonnement</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,17 +66,6 @@
                                         <span class="admin-badge badge-success">✓ Actif</span>
                                     <?php else : ?>
                                         <span class="admin-badge badge-neutral">Inactif</span>
-                                    <?php endif ?>
-                                </td>
-                                <td>
-                                    <?php if($client->client_login !== "admin") : ?>
-                                    <form method="POST" action="/admin/utilisateurs"
-                                          onsubmit="return confirm('Supprimer cet utilisateur ?')">
-                                        <input type="hidden" name="client_id" value="<?= $client->client_ID ?>">
-                                        <button type="submit" name="deleteClient" class="admin-btn-delete">🗑️ Supprimer</button>
-                                    </form>
-                                    <?php else : ?>
-                                        <span style="color:var(--text-muted);font-size:0.78rem;">🔒 Protégé</span>
                                     <?php endif ?>
                                 </td>
                             </tr>

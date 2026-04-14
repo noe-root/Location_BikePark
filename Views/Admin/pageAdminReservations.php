@@ -37,7 +37,7 @@
                             <tr>
                                 <th><input type="checkbox" id="selectAllReservations" onclick="toggleAll(this, 'reservations[]')" aria-label="Sélectionner toutes les réservations"></th>
                                 <th>ID</th><th>Client</th><th>Matériel</th><th>Date</th>
-                                <th>Lieu</th><th>Horaires</th><th>Statut</th><th>Actions</th>
+                                <th>Lieu</th><th>Horaires</th><th>Statut</th><th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -69,21 +69,15 @@
                                     <span class="admin-badge <?= $badgeClass ?>"><?= htmlspecialchars($r->reserve_statut) ?></span>
                                 </td>
                                 <td>
-                                    <div style="display:flex; gap:0.4rem; align-items:center;">
-                                        <form method="POST" action="/admin/reservations" style="display:flex;gap:0.4rem;align-items:center">
-                                            <input type="hidden" name="reserve_ID" value="<?= $r->reserve_ID ?>">
-                                            <select name="reserve_statut" class="admin-select-small">
-                                                <option value="Confirmée" <?= $r->reserve_statut === "Confirmée" ? "selected" : "" ?>>Confirmée</option>
-                                                <option value="Annulé"    <?= $r->reserve_statut === "Annulé"    ? "selected" : "" ?>>Annulé</option>
-                                                <option value="Terminée"  <?= $r->reserve_statut === "Terminée"  ? "selected" : "" ?>>Terminée</option>
-                                            </select>
-                                            <button type="submit" name="updateStatut" class="admin-btn-edit">✏️</button>
-                                        </form>
-                                        <form method="POST" action="/admin/reservations" onsubmit="return confirm('Supprimer ?')">
-                                            <input type="hidden" name="reserve_ID" value="<?= $r->reserve_ID ?>">
-                                            <button type="submit" name="deleteReservation" class="admin-btn-delete">🗑️</button>
-                                        </form>
-                                    </div>
+                                    <form method="POST" action="/admin/reservations" style="display:flex;gap:0.4rem;align-items:center">
+                                        <input type="hidden" name="reserve_ID" value="<?= $r->reserve_ID ?>">
+                                        <select name="reserve_statut" class="admin-select-small">
+                                            <option value="Confirmée" <?= $r->reserve_statut === "Confirmée" ? "selected" : "" ?>>Confirmée</option>
+                                            <option value="Annulé"    <?= $r->reserve_statut === "Annulé"    ? "selected" : "" ?>>Annulé</option>
+                                            <option value="Terminée"  <?= $r->reserve_statut === "Terminée"  ? "selected" : "" ?>>Terminée</option>
+                                        </select>
+                                        <button type="submit" name="updateStatut" class="admin-btn-edit">✏️</button>
+                                    </form>
                                 </td>
                             </tr>
                             <?php endforeach ?>
