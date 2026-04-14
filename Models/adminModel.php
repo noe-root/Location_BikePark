@@ -23,8 +23,21 @@ function selectAllClients($pdo) {
 
 function deleteClient($pdo, $id) {
     try {
-        $stmt = $pdo->prepare("DELETE FROM sys.client WHERE client_ID = :id");
+        $stmt = $pdo->prepare("DELETE FROM sys.client WHERE client_ID = :id AND client_login != 'admin'");
         $stmt->execute(["id" => (int)$id]);
+        return true;
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
+function deleteClientsBatch($pdo, $ids) {
+    try {
+        $ids = array_values(array_map('intval', (array)$ids));
+        if (empty($ids)) return true;
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $pdo->prepare("DELETE FROM sys.client WHERE client_ID IN ($placeholders) AND client_login != 'admin'");
+        $stmt->execute($ids);
         return true;
     } catch (PDOException $e) {
         return $e->getMessage();
@@ -58,6 +71,19 @@ function deleteReservation($pdo, $id) {
     try {
         $stmt = $pdo->prepare("DELETE FROM sys.reserve WHERE reserve_ID = :id");
         $stmt->execute(["id" => (int)$id]);
+        return true;
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
+function deleteReservationsBatch($pdo, $ids) {
+    try {
+        $ids = array_values(array_map('intval', (array)$ids));
+        if (empty($ids)) return true;
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $stmt = $pdo->prepare("DELETE FROM sys.reserve WHERE reserve_ID IN ($placeholders)");
+        $stmt->execute($ids);
         return true;
     } catch (PDOException $e) {
         return $e->getMessage();
