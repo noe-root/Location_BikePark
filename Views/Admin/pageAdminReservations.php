@@ -66,7 +66,7 @@
                                 <?php
                                     $badgeClass = match($r->reserve_statut) {
                                         "Confirmée" => "badge-success",
-                                        "Annulé"    => "badge-danger",
+                                        "Annulée"    => "badge-danger",
                                         "Terminée"  => "badge-neutral",
                                         default     => "badge-warning"
                                     };
@@ -78,7 +78,7 @@
                                     <input type="hidden" name="reserve_ID" value="<?= $r->reserve_ID ?>">
                                     <select name="reserve_statut" class="admin-select-small">
                                         <option value="Confirmée" <?= $r->reserve_statut === "Confirmée" ? "selected" : "" ?>>Confirmée</option>
-                                        <option value="Annulé"    <?= $r->reserve_statut === "Annulé"    ? "selected" : "" ?>>Annulé</option>
+                                        <option value="Annulée"    <?= $r->reserve_statut === "Annulée"    ? "selected" : "" ?>>Annulée</option>
                                         <option value="Terminée"  <?= $r->reserve_statut === "Terminée"  ? "selected" : "" ?>>Terminée</option>
                                     </select>
                                     <button type="submit" name="updateStatut" class="admin-btn-edit">✏️</button>
