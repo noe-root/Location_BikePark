@@ -51,7 +51,7 @@
                                     <?php endif ?>
                                 </td>
                                 <td><span class="admin-id">#<?= $client->client_ID ?></span></td>
-                                <td><strong><?= htmlspecialchars($client->client_prenom . " " . $client->client_nom) ?></strong></td>
+                                <td><strong><a href="/admin/utilisateur?id=<?= $client->client_ID ?>" style="color:inherit;text-decoration:none;"><?= htmlspecialchars($client->client_prenom . " " . $client->client_nom) ?></a></strong></td>
                                 <td><?= htmlspecialchars($client->client_email) ?></td>
                                 <td>
                                     <?php if($client->client_login === "admin") : ?>

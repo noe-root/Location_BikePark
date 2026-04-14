@@ -147,6 +147,51 @@ function deleteBikepark($pdo, $id) {
 }
 
 // ===========================
+// UTILISATEUR DÉTAIL (admin)
+// ===========================
+function selectClientById($pdo, $id) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM sys.client WHERE client_ID = :id");
+        $stmt->execute(["id" => (int)$id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    }
+}
+
+function selectReservationsByClientAdmin($pdo, $clientId) {
+    try {
+        $stmt = $pdo->prepare("
+            SELECT r.*, m.materiel_nom, m.materiel_type
+            FROM sys.reserve r
+            LEFT JOIN sys.materiel m ON r.materiel_ID = m.materiel_ID
+            WHERE r.client_ID = :id
+            ORDER BY r.reserve_dateCreation DESC
+        ");
+        $stmt->execute(["id" => (int)$clientId]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    }
+}
+
+function selectBikeparkByClientAdmin($pdo, $clientId) {
+    try {
+        $stmt = $pdo->prepare("
+            SELECT p.*, b.*
+            FROM sys.payer p
+            LEFT JOIN sys.bikepark b ON p.bikepark_ID = b.bikepark_ID
+            WHERE p.client_ID = :id
+            ORDER BY p.payer_datePaiement DESC
+        ");
+        $stmt->execute(["id" => (int)$clientId]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        die($e->getMessage());
+    }
+}
+
+// ===========================
 // STATS DASHBOARD
 // ===========================
 function getStatsAdmin($pdo) {

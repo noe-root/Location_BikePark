@@ -72,6 +72,23 @@
         $bikeparks = selectAllBikeparkAdmin($pdo);
         $template = "Views/Admin/pageAdminBikepark.php";
     }
+    elseif (parse_url($uri, PHP_URL_PATH) === "/admin/utilisateur")
+    {
+        requireAdmin();
+        $clientId = isset($_GET["id"]) ? (int)$_GET["id"] : 0;
+        if ($clientId <= 0) {
+            header("location:/admin/utilisateurs");
+            exit;
+        }
+        $client = selectClientById($pdo, $clientId);
+        if (!$client) {
+            header("location:/admin/utilisateurs");
+            exit;
+        }
+        $reservations = selectReservationsByClientAdmin($pdo, $clientId);
+        $commandesBikepark = selectBikeparkByClientAdmin($pdo, $clientId);
+        $template = "Views/Admin/pageAdminUtilisateur.php";
+    }
 
     // ✅ Affiche base_admin.php seulement si $template est défini
     if (isset($template)) {
