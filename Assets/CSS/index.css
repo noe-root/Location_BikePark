@@ -2151,3 +2151,14 @@ html { scroll-behavior: smooth; }
     flex-wrap: wrap;
     margin-top: 1.5rem;
 }
+/* Animation apparition cartes */
+.product-card, .piste-card {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: all 0.6s ease;
+}
+
+.product-card.fade-in, .piste-card.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
