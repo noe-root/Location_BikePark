@@ -22,6 +22,9 @@
                 <h1 class="admin-title">Matériels</h1>
                 <p class="admin-subtitle"><?= count($materiels) ?> matériels enregistrés</p>
             </div>
+            <div class="admin-header-right">
+                <a href="/admin/materiels/ajouter" class="admin-btn-add">＋ Ajouter un matériel</a>
+            </div>
         </div>
 
         <div class="admin-section">

@@ -61,6 +61,50 @@
         $materiels = selectAllMaterielAdmin($pdo);
         $template = "Views/Admin/pageAdminMateriels.php";
     }
+    elseif ($uri === "/admin/materiels/ajouter")
+    {
+        requireAdmin();
+        $errors = [];
+        if (isset($_POST["addMateriel"])) {
+            $fieldLabels = [
+                "fournisseur_ID"                => "Fournisseur",
+                "materiel_nom"                  => "Nom",
+                "materiel_type"                 => "Type",
+                "materiel_modele"               => "Modèle",
+                "materiel_taille"               => "Taille",
+                "materiel_tarifLocation"        => "Tarif de location",
+                "materiel_annee"                => "Année",
+                "materiel_etatMateriel"         => "État",
+                "materiel_dateDerniereRevision" => "Date dernière révision",
+            ];
+            foreach (array_keys($fieldLabels) as $field) {
+                if (empty($_POST[$field])) {
+                    $errors[] = "Le champ « " . $fieldLabels[$field] . " » est obligatoire.";
+                }
+            }
+            if (empty($errors)) {
+                $result = insertMateriel($pdo, [
+                    "fournisseur_ID"               => $_POST["fournisseur_ID"],
+                    "materiel_nom"                 => trim($_POST["materiel_nom"]),
+                    "materiel_type"                => trim($_POST["materiel_type"]),
+                    "materiel_modele"              => trim($_POST["materiel_modele"]),
+                    "materiel_taille"              => trim($_POST["materiel_taille"]),
+                    "materiel_disponibilite"       => isset($_POST["materiel_disponibilite"]) ? 1 : 0,
+                    "materiel_tarifLocation"       => $_POST["materiel_tarifLocation"],
+                    "materiel_annee"               => $_POST["materiel_annee"],
+                    "materiel_etatMateriel"        => trim($_POST["materiel_etatMateriel"]),
+                    "materiel_dateDerniereRevision" => $_POST["materiel_dateDerniereRevision"],
+                ]);
+                if ($result === true) {
+                    header("location:/admin/materiels");
+                    exit;
+                }
+                $errors[] = "Erreur lors de l'insertion : " . $result;
+            }
+        }
+        $fournisseurs = selectAllFournisseurs($pdo);
+        $template = "Views/Admin/pageAdminAjouterMateriel.php";
+    }
     elseif ($uri === "/admin/bikepark") 
     {
         requireAdmin();

@@ -91,6 +91,19 @@ function deleteReservationsBatch($pdo, $ids) {
 }
 
 // ===========================
+// FOURNISSEURS
+// ===========================
+function selectAllFournisseurs($pdo) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM sys.fournisseur ORDER BY fournisseur_ID");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
+// ===========================
 // MATÉRIELS
 // ===========================
 function selectAllMaterielAdmin($pdo) {
@@ -107,6 +120,36 @@ function updateMaterielDisponibilite($pdo, $id, $dispo) {
     try {
         $stmt = $pdo->prepare("UPDATE sys.materiel SET materiel_disponibilite = :dispo WHERE materiel_ID = :id");
         $stmt->execute(["dispo" => (int)$dispo, "id" => (int)$id]);
+        return true;
+    } catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
+function insertMateriel($pdo, $data) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO sys.materiel
+                (fournisseur_ID, materiel_nom, materiel_type, materiel_modele,
+                 materiel_taille, materiel_disponibilite, materiel_tarifLocation,
+                 materiel_annee, materiel_etatMateriel, materiel_dateDerniereRevision)
+            VALUES
+                (:fournisseur_ID, :materiel_nom, :materiel_type, :materiel_modele,
+                 :materiel_taille, :materiel_disponibilite, :materiel_tarifLocation,
+                 :materiel_annee, :materiel_etatMateriel, :materiel_dateDerniereRevision)
+        ");
+        $stmt->execute([
+            "fournisseur_ID"              => (int)$data["fournisseur_ID"],
+            "materiel_nom"                => $data["materiel_nom"],
+            "materiel_type"               => $data["materiel_type"],
+            "materiel_modele"             => $data["materiel_modele"],
+            "materiel_taille"             => $data["materiel_taille"],
+            "materiel_disponibilite"      => (int)$data["materiel_disponibilite"],
+            "materiel_tarifLocation"      => $data["materiel_tarifLocation"],
+            "materiel_annee"              => (int)$data["materiel_annee"],
+            "materiel_etatMateriel"       => $data["materiel_etatMateriel"],
+            "materiel_dateDerniereRevision" => $data["materiel_dateDerniereRevision"],
+        ]);
         return true;
     } catch (PDOException $e) {
         return $e->getMessage();

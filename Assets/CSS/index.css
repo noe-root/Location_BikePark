@@ -2030,6 +2030,73 @@ html { scroll-behavior: smooth; }
 .admin-select-small:focus { border-color: var(--green); }
 
 /* ===========================
+   BOUTON AJOUTER
+=========================== */
+.admin-btn-add {
+    background: var(--green);
+    color: var(--white);
+    border: none;
+    padding: 0.55rem 1.2rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+}
+.admin-btn-add:hover {
+    background: var(--green-dark);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+
+/* ===========================
+   FORMULAIRE ADMIN
+=========================== */
+.admin-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 2rem;
+    max-width: 900px;
+}
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.admin-form-group:last-of-type {
+    grid-column: 1 / -1;
+}
+.admin-form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+.admin-form-input {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    padding: 0.55rem 0.75rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color var(--transition);
+    width: 100%;
+    box-sizing: border-box;
+}
+.admin-form-input:focus {
+    border-color: var(--green);
+}
+@media (max-width: 700px) {
+    .admin-form { grid-template-columns: 1fr; }
+}
+
+/* ===========================
    ANIMATIONS ENTRÉE
 =========================== */
 .admin-stat-card {
