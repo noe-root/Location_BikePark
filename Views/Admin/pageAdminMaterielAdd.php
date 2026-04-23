@@ -74,14 +74,14 @@
                 <div class="admin-form-group">
                     <label class="admin-form-label" for="materiel_disponibilite">Disponibilité <span style="color:red">*</span></label>
                     <select class="admin-form-input" id="materiel_disponibilite" name="materiel_disponibilite" required>
-                        <option value="1" <?= (isset($old['materiel_disponibilite']) && $old['materiel_disponibilite'] == '1') || !isset($old) ? 'selected' : '' ?>>✓ Disponible</option>
+                        <option value="1" <?= (!isset($old['materiel_disponibilite']) || $old['materiel_disponibilite'] == '1') ? 'selected' : '' ?>>✓ Disponible</option>
                         <option value="0" <?= (isset($old['materiel_disponibilite']) && $old['materiel_disponibilite'] == '0') ? 'selected' : '' ?>>✗ Indisponible</option>
                     </select>
                 </div>
 
                 <div style="display:flex; gap:1rem; margin-top:1.5rem;">
                     <button type="submit" name="addMateriel" class="admin-btn-add">✅ Enregistrer</button>
-                    <a href="/admin/materiels" class="admin-btn-delete" style="text-decoration:none; display:inline-flex; align-items:center;">✖ Annuler</a>
+                    <a href="/admin/materiels" class="admin-btn-cancel">✖ Annuler</a>
                 </div>
             </form>
         </div>

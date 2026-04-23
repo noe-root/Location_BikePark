@@ -2227,3 +2227,24 @@ html { scroll-behavior: smooth; }
     border: 1px solid #e05252;
     color: #b91c1c;
 }
+
+.admin-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--bg);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), border-color var(--transition);
+}
+.admin-btn-cancel:hover {
+    background: #fde8e8;
+    border-color: #e05252;
+}

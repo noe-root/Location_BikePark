@@ -128,7 +128,7 @@ function insertMateriel($pdo, $nom, $type, $taille, $tarif, $etat, $disponibilit
     if (empty($nom)) $errors[] = "Le nom est obligatoire.";
     if (empty($type)) $errors[] = "Le type est obligatoire.";
     if (empty($etat)) $errors[] = "L'état est obligatoire.";
-    if (!is_numeric($tarif) || (float)$tarif < 0) $errors[] = "Le tarif doit être un nombre positif.";
+    if (!is_numeric($tarif) || (float)$tarif < 0) $errors[] = "Le tarif doit être un nombre positif ou zéro.";
     if (!empty($errors)) return $errors;
 
     try {
