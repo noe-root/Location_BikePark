@@ -2162,3 +2162,68 @@ html { scroll-behavior: smooth; }
     opacity: 1;
     transform: translateY(0);
 }
+/* ===========================
+   ADMIN — ADD BUTTON & FORM
+=========================== */
+.admin-btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background var(--transition), transform var(--transition);
+    white-space: nowrap;
+}
+.admin-btn-add:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+}
+
+.admin-form {
+    max-width: 600px;
+}
+.admin-form-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.admin-form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+.admin-form-input {
+    padding: 0.55rem 0.85rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color var(--transition);
+}
+.admin-form-input:focus {
+    border-color: var(--green);
+}
+
+.admin-alert {
+    padding: 0.9rem 1.1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+}
+.admin-alert-danger {
+    background: #fde8e8;
+    border: 1px solid #e05252;
+    color: #b91c1c;
+}

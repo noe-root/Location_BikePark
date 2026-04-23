@@ -123,6 +123,30 @@ function deleteMateriel($pdo, $id) {
     }
 }
 
+function insertMateriel($pdo, $nom, $type, $taille, $tarif, $etat, $disponibilite) {
+    $errors = [];
+    if (empty($nom)) $errors[] = "Le nom est obligatoire.";
+    if (empty($type)) $errors[] = "Le type est obligatoire.";
+    if (empty($etat)) $errors[] = "L'état est obligatoire.";
+    if (!is_numeric($tarif) || (float)$tarif < 0) $errors[] = "Le tarif doit être un nombre positif.";
+    if (!empty($errors)) return $errors;
+
+    try {
+        $stmt = $pdo->prepare("INSERT INTO sys.materiel (materiel_nom, materiel_type, materiel_taille, materiel_tarifLocation, materiel_etatMateriel, materiel_disponibilite) VALUES (:nom, :type, :taille, :tarif, :etat, :dispo)");
+        $stmt->execute([
+            "nom"   => $nom,
+            "type"  => $type,
+            "taille"=> $taille !== '' ? $taille : null,
+            "tarif" => (float)$tarif,
+            "etat"  => $etat,
+            "dispo" => (int)$disponibilite,
+        ]);
+        return true;
+    } catch (PDOException $e) {
+        return [$e->getMessage()];
+    }
+}
+
 // ===========================
 // BIKEPARK
 // ===========================
