@@ -50,9 +50,11 @@
         $lieux     = selectLieuxBikepark($pdo);
         if (isset($_POST["reserverMateriel"])) {
             // ✅ Stockage en session sans insérer en BD
+            $ids = $_POST["materiel_ID"] ?? [];
+            if (!is_array($ids)) $ids = [$ids];
             $_SESSION["reservation_pending"] = [
                 "type"               => "materiel",
-                "materiel_ID"        => $_POST["materiel_ID"],
+                "materiel_IDs"       => $ids,
                 "bikepark_ID"        => $_POST["bikepark_ID"],
                 "reserve_date"       => $_POST["reserve_date"],
                 "reserve_lieu"       => $_POST["reserve_lieu"],
@@ -60,10 +62,12 @@
                 "reserve_heureFin"   => $_POST["reserve_heureFin"],
                 "reserve_commentaire"=> $_POST["reserve_commentaire"] ?? null,
             ];
-            $stmt = $pdo->prepare("SELECT materiel_tarifLocation FROM sys.materiel WHERE materiel_ID = :id");
-            $stmt->execute(["id" => (int)$_POST["materiel_ID"]]);
-            $mat = $stmt->fetch(PDO::FETCH_OBJ);
-            $_SESSION["montant_total"] = $mat->materiel_tarifLocation ?? 0;
+            $intIds = array_map('intval', $ids);
+            $placeholders = implode(',', array_fill(0, count($intIds), '?'));
+            $stmt = $pdo->prepare("SELECT materiel_tarifLocation FROM sys.materiel WHERE materiel_ID IN ($placeholders)");
+            $stmt->execute($intIds);
+            $total = array_sum(array_column($stmt->fetchAll(PDO::FETCH_OBJ), 'materiel_tarifLocation'));
+            $_SESSION["montant_total"] = $total;
             header("location:/paiement");
             exit;
         }

@@ -45,8 +45,7 @@
                     <!-- Choix matériel -->
                     <div class="resa-field">
                         <label for="materiel_ID">Matériel</label>
-                        <select name="materiel_ID" id="materiel_ID" required>
-                            <option value="" disabled selected>-- Choisissez un matériel --</option>
+                        <select name="materiel_ID[]" id="materiel_ID" multiple required>
                             <?php foreach($materiels as $mat) : ?>
                                 <option value="<?= $mat->materiel_ID ?>">
                                     <?= htmlspecialchars($mat->materiel_nom) ?>
@@ -56,6 +55,7 @@
                                 </option>
                             <?php endforeach ?>
                         </select>
+                        <small>Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs matériels.</small>
                         <?php if(isset($messageError["materiel_ID"])) : ?>
                             <small><?= $messageError["materiel_ID"] ?></small>
                         <?php endif ?>

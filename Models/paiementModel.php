@@ -22,6 +22,8 @@ function insertPaiementEtReservation($pdo) {
             $bikepark_ID = $pdo->lastInsertId();
 
         } else {
+            $ids = $pending["materiel_IDs"] ?? [];
+            if (!is_array($ids)) $ids = [$ids];
             $stmt = $pdo->prepare("INSERT INTO sys.reserve
                 (client_ID, materiel_ID, bikepark_ID, reserve_date, reserve_lieu,
                  reserve_heureDebut, reserve_heureFin, reserve_statut,
@@ -29,17 +31,19 @@ function insertPaiementEtReservation($pdo) {
                 VALUES (:client_ID, :materiel_ID, :bikepark_ID, :reserve_date, :reserve_lieu,
                  :reserve_heureDebut, :reserve_heureFin, :reserve_statut,
                  :reserve_commentaire, NOW())");
-            $stmt->execute([
-                "client_ID"          => (int) $_SESSION["user"]->client_ID,
-                "materiel_ID"        => (int) $pending["materiel_ID"],
-                "bikepark_ID"        => (int) $pending["bikepark_ID"],
-                "reserve_date"       => $pending["reserve_date"],
-                "reserve_lieu"       => $pending["reserve_lieu"],
-                "reserve_heureDebut" => $pending["reserve_heureDebut"],
-                "reserve_heureFin"   => $pending["reserve_heureFin"],
-                "reserve_statut"     => "Confirmée",
-                "reserve_commentaire"=> $pending["reserve_commentaire"],
-            ]);
+            foreach ($ids as $materielId) {
+                $stmt->execute([
+                    "client_ID"          => (int) $_SESSION["user"]->client_ID,
+                    "materiel_ID"        => (int) $materielId,
+                    "bikepark_ID"        => (int) $pending["bikepark_ID"],
+                    "reserve_date"       => $pending["reserve_date"],
+                    "reserve_lieu"       => $pending["reserve_lieu"],
+                    "reserve_heureDebut" => $pending["reserve_heureDebut"],
+                    "reserve_heureFin"   => $pending["reserve_heureFin"],
+                    "reserve_statut"     => "Confirmée",
+                    "reserve_commentaire"=> $pending["reserve_commentaire"],
+                ]);
+            }
             $bikepark_ID = (int) $pending["bikepark_ID"];
         }
 
