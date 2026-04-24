@@ -93,6 +93,60 @@ function deleteReservationsBatch($pdo, $ids) {
 // ===========================
 // MATÉRIELS
 // ===========================
+function selectAllFournisseurAdmin($pdo) {
+    try {
+        $stmt = $pdo->prepare("SELECT fournisseur_ID, fournisseur_nom FROM sys.fournisseur ORDER BY fournisseur_nom");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
+function insertMateriel($pdo, $data) {
+    $requiredLabels = [
+        'fournisseur_ID'        => 'Fournisseur',
+        'materiel_nom'          => 'Nom',
+        'materiel_type'         => 'Type',
+        'materiel_disponibilite'=> 'Disponibilité',
+        'materiel_tarifLocation'=> 'Tarif de location',
+        'materiel_etatMateriel' => 'État du matériel',
+    ];
+    foreach ($requiredLabels as $field => $label) {
+        if (!isset($data[$field]) || $data[$field] === '') {
+            return "Le champ « $label » est obligatoire.";
+        }
+    }
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO sys.materiel
+                (fournisseur_ID, materiel_nom, materiel_type, materiel_modele, materiel_taille,
+                 materiel_disponibilite, materiel_tarifLocation, materiel_annee,
+                 materiel_etatMateriel, materiel_dateDerniereRevision)
+            VALUES
+                (:fournisseur_ID, :materiel_nom, :materiel_type, :materiel_modele, :materiel_taille,
+                 :materiel_disponibilite, :materiel_tarifLocation, :materiel_annee,
+                 :materiel_etatMateriel, :materiel_dateDerniereRevision)
+        ");
+        $stmt->execute([
+            'fournisseur_ID'               => (int)$data['fournisseur_ID'],
+            'materiel_nom'                 => $data['materiel_nom'],
+            'materiel_type'                => $data['materiel_type'],
+            'materiel_modele'              => $data['materiel_modele'] ?: null,
+            'materiel_taille'              => $data['materiel_taille'] ?: null,
+            'materiel_disponibilite'       => (int)$data['materiel_disponibilite'],
+            'materiel_tarifLocation'       => (float)$data['materiel_tarifLocation'],
+            'materiel_annee'               => $data['materiel_annee'] !== '' ? (int)$data['materiel_annee'] : null,
+            'materiel_etatMateriel'        => $data['materiel_etatMateriel'],
+            'materiel_dateDerniereRevision'=> $data['materiel_dateDerniereRevision'] ?: null,
+        ]);
+        return true;
+    } catch (PDOException $e) {
+        error_log("insertMateriel error: " . $e->getMessage());
+        return "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer.";
+    }
+}
+
 function selectAllMaterielAdmin($pdo) {
     try {
         $stmt = $pdo->prepare("SELECT * FROM sys.materiel ORDER BY materiel_type");
