@@ -61,6 +61,21 @@
         $materiels = selectAllMaterielAdmin($pdo);
         $template = "Views/Admin/pageAdminMateriels.php";
     }
+    elseif ($uri === "/admin/materiels/ajouter")
+    {
+        requireAdmin();
+        $fournisseurs = selectAllFournisseurAdmin($pdo);
+        $formError = null;
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["addMateriel"])) {
+            $result = insertMateriel($pdo, $_POST);
+            if ($result === true) {
+                header("Location: /admin/materiels");
+                exit;
+            }
+            $formError = $result;
+        }
+        $template = "Views/Admin/pageAdminAjouterMateriel.php";
+    }
     elseif ($uri === "/admin/bikepark") 
     {
         requireAdmin();
